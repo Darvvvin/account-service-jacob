@@ -1,13 +1,7 @@
 package com.apper;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +46,22 @@ public class AccountController {
         return responseList;
     }
 
+    // Update Account
+    @PutMapping("{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public GetAccountResponse postAccount(@RequestBody CreateAccountRequest request, @PathVariable String accountId) {
+
+        Account account = accountService.update(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getPassword(),
+                accountId
+        );
+
+        return createGetAccountResponse(account);
+    }
+
     private GetAccountResponse createGetAccountResponse(Account account) {
         GetAccountResponse response = new GetAccountResponse();
         response.setBalance(account.getBalance());
@@ -60,7 +70,7 @@ public class AccountController {
         response.setUsername(account.getUsername());
         response.setRegistrationDate(account.getCreationDate());
         response.setAccountId(account.getId());
+
         return response;
     }
-
 }

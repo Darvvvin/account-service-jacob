@@ -10,7 +10,7 @@ import java.util.UUID;
 @Service
 public class AccountService {
 
-    private List<Account> accounts = new ArrayList<>();
+    private final List<Account> accounts = new ArrayList<>();
 
     public Account create(String firstName, String lastName, String username, String clearPassword) {
         Account account = new Account();
@@ -49,12 +49,26 @@ public class AccountService {
     public List<Account> getAll() {
         return accounts;
     }
-//
-//    public void update() {
-//
-//    }
-//
-//    public void delete() {
-//
-//    }
+
+    public Account update(String firstName, String lastName, String username, String clearPassword, String accountId) {
+        Account account = new Account();
+
+        LocalDateTime now = LocalDateTime.now();
+        account.setLastUpdated(now);
+
+        // Update
+        account.setFirstName(firstName);
+        account.setLastName(lastName);
+        account.setUsername(username);
+        account.setClearPassword(clearPassword);
+
+        // Get from previous
+        account.setBalance(get(accountId).getBalance());
+        account.setCreationDate(get(accountId).getCreationDate());
+        account.setId(accountId);
+
+        accounts.set(accounts.indexOf(get(accountId)), account);
+
+        return account;
+    }
 }
